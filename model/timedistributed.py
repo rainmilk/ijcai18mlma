@@ -48,7 +48,7 @@ class TimeDistributedMultiInput(Layer):
         for shape in input_shape:
             assert len(shape) >= 3
         self.input_spec = [InputSpec(shape=shape) for shape in input_shape]
-        if K._BACKEND == 'tensorflow':
+        if K.backend() == 'tensorflow':
             for shape in input_shape:
                 if not shape[1]:
                     raise Exception('When using TensorFlow, you should define '
