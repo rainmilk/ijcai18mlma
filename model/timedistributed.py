@@ -66,7 +66,7 @@ class TimeDistributedMultiInput(Layer):
         if not self.layer.built:
             self.layer.build(child_input_shape)
             self.layer.built = True
-        super(TimeDistributedMultiInput, self).build()
+        super(TimeDistributedMultiInput, self).build(input_shape)
 
     def compute_output_shape(self, input_shape):
         if type(input_shape) == list:
