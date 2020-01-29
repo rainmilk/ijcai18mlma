@@ -107,6 +107,7 @@ def test():
     print("RECALL")
     print(recall / nTest)
 
+
 def train_with_test(train_set, testepoch=2):
     for epoch in range(max_epoch):
         train_set = shuffle(train_set)
@@ -137,7 +138,7 @@ def train_with_test(train_set, testepoch=2):
 
 
 margin = 20
-batch_size = 500
+batch_size = 200
 max_epoch = 10
 nb_samples = train_set.shape[0]
 nb_batch = math.ceil(nb_samples / batch_size)
