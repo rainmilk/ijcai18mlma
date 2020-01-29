@@ -56,7 +56,7 @@ class MovieAttractionModel(object):
             self.word_embedding = Embedding(self.voca_size + 1, self.word_embed_len, mask_zero=True, name='word_embedding')
             # Word-level model for sentence encoding
             w_embed = self.word_embedding(word_input)
-            w_user_embed = Embedding(self.user_size, w_embed.shape[-1].value,
+            w_user_embed = Embedding(self.user_size, K.int_shape(w_embed)[-1],
                                      name='user_word_embedding', embeddings_regularizer=self.user_reg)(u_input)
             sent_embed_att = BatchAttention(name='word_attention', alpha=self.alpha_att_word)([w_embed, w_user_embed])
             sent_embed_avg = Attention(name='word_avg_attention', alpha=self.alpha_word)(w_embed)
@@ -69,7 +69,7 @@ class MovieAttractionModel(object):
             if self.dropout > 0: s_embed = Dropout(rate=self.dropout)(s_embed)
             s_embed = Dense(self.sent_embed_len, activation=self.hid_activation)(s_embed)
 
-            s_user_embed = Embedding(self.user_size, s_embed.shape[-1].value,
+            s_user_embed = Embedding(self.user_size, K.int_shape(s_embed)[-1],
                                      name='user_sent_embedding', embeddings_regularizer=self.user_reg)(u_input)
             doc_embed_att = BatchAttention(name='sent_attention', alpha=self.alpha_att_sent, keepdims=True)([s_embed, s_user_embed])
             doc_embed_avg = Attention(name='sent_avg_attention', alpha=self.alpha_sent, keepdims=True)(s_embed)
@@ -84,7 +84,7 @@ class MovieAttractionModel(object):
                                        name='cast_embedding', embeddings_regularizer=self.actor_reg)
 
             actor_embed = self.actor_embedding(a_input)
-            a_user_embed = Embedding(self.user_size, actor_embed.shape[-1].value,
+            a_user_embed = Embedding(self.user_size, K.int_shape(actor_embed)[-1],
                                      name='user_cast_embedding', embeddings_regularizer=self.user_reg)(u_input)
             cast_embedding_att = BatchAttention(name='cast_attention', alpha=self.alpha_att_cast, keepdims=True)([actor_embed, a_user_embed])
             cast_embedding_avg = Attention(name='cast_avg_attention', alpha=self.alpha_cast, keepdims=True)(actor_embed)
@@ -101,7 +101,7 @@ class MovieAttractionModel(object):
         # joint_embedding = Dense(self.cast_embed_len + self.doc_embed_len, activation=self.hid_activation)(joint_embedding)
 
         # top-level score
-        score_user_embed = Embedding(self.user_size, joint_embedding.shape[-1].value,
+        score_user_embed = Embedding(self.user_size, K.int_shape(joint_embedding)[-1],
                                      name='user_score_embedding', embeddings_regularizer=self.user_reg)(u_input)
 
         # scores = ScoreLayer(name='score')([joint_embedding, score_user_embed])
